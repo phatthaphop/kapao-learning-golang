@@ -1,0 +1,28 @@
+version: "3"
+
+tasks:
+  pull:
+    desc: Pull the latest Docker image for PostgreSQL
+    cmds:
+      - docker pull postgres:latest
+
+  post-run:
+    desc: Run the Docker container
+    cmds:
+      - docker run -it -rm --name postgres -v postgresKp:/var/lib/postgresql/data -e POSTGRES_PASSWORD=password -p 5432:5432 -d postgres:latest
+
+  stop:
+    desc: Stop the Docker container
+    cmds:
+      - docker stop postgres
+
+  exec:
+    desc: Execute a command in the running Docker container
+    cmds:
+      - docker exec -it postgres psql -U postgres
+
+  go-run:
+    desc: Run the Go application
+    dir: "{{.USER_WORKING_DIR}}/app"
+    cmds:
+      - go run main.go
